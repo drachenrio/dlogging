@@ -1,0 +1,13 @@
+**/__pycache__/
+**/logs/
+**/output/
+**/pytest_cache/
+**/*.pyc
+.idea/
+.project
+.pydevproject
+.settings/
+build/
+dist/
+dlogging.egg-info/
+tests/test_logs/
