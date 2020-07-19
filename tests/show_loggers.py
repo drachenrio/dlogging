@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from dlogging import DLogger, FORMATS, Fmt
-from .utils import show_all_loggers
+from dlogging.utils import show_all_loggers
 
 log1 = DLogger("log1")
 log2 = DLogger("log2", log_fmt=FORMATS[Fmt.FNAME_LINENO_FUNCNAME])

@@ -22,7 +22,15 @@ setup(
         'Natural Language :: English',
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    install_requires=[],
     python_requires='>=3.6',
+    extras_require={
+        "dev": [
+            "pytest>=5.0",
+        ],
+    },
 )

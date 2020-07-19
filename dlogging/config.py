@@ -32,12 +32,18 @@ class DateFmt:
 class Fmt:
     """ Logging formats """
     DEFAULT = "name_level_message"
-    COMPLEX = "complex"
-    LEVEL_MSG = "level_message"
-    MSG = "message"
+    COMPLEX = "COMPLEX"
+    FNAME_LEVEL_MSG = "FNAME_LEVEL_MSG"
+    FNAME_LINENO_FUNCNAME = "FNAME_LINENO_FUNCNAME"
+    FNAME_LINENO_LEVEL = "FNAME_LINENO_LEVEL"
+    LEVEL_MSG = "LEVEL_MSG"
+    MSG = "MSG"
 
 FORMATS = {Fmt.DEFAULT: '%(name)s %(levelname)s %(message)s',
            Fmt.COMPLEX: '%(asctime)s %(filename)s:%(lineno)d : %(funcName)s %(name)s %(levelname)s %(message)s',
+           Fmt.FNAME_LEVEL_MSG: '%(filename)s %(levelname)s %(message)s',
+           Fmt.FNAME_LINENO_FUNCNAME: '%(filename)s:%(lineno)d %(funcName)s %(levelname)s %(message)s',
+           Fmt.FNAME_LINENO_LEVEL: '%(filename)s:%(lineno)d %(levelname)s %(message)s',
            Fmt.LEVEL_MSG: '%(levelname)s %(message)s',
            Fmt.MSG: '%(message)s',
            }

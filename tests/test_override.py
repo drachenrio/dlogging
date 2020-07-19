@@ -18,7 +18,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from dlogging import DLogger, FORMATS, Fmt, LOG_CONF
-from .utils import print_file_contents, message_count, write_message
+from dlogging.utils import print_file_contents, message_count, write_message
 
 
 _DIR_LIST: str = ["logs/", "test_logs/"]

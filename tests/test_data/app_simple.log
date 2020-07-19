@@ -1,4 +1,4 @@
-main INFO info message
-main WARNING warn message
-main ERROR error message
-main CRITICAL critical message
+INFO info message
+WARNING warn message
+ERROR error message
+CRITICAL critical message

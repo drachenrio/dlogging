@@ -1,7 +1,7 @@
-include *.rst
+include *.in
 include *.txt
-recursive-include docs *
-recursive-exclude docs *.pyc
-recursive-exclude docs *.pyo
-recursive-exclude docs/_build *
-recursive-exclude docs/__pycache__ *
+include tox.ini
+recursive-include requirements *.txt
+recursive-include tests *.ini
+recursive-include tests *.log
+recursive-include tests *.py

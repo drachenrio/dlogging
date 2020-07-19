@@ -18,7 +18,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from dlogging import DLogger, FORMATS, Fmt
-from .utils import (get_all_loggers, show_all_loggers, print_file_contents, compare_files,
+from dlogging.utils import (get_all_loggers, show_all_loggers, print_file_contents, compare_files,
                             message_count, write_message)
 
 def setup_module():
@@ -91,12 +91,12 @@ def test_propagate_false():
     print_file_contents("logs/sub.log")
 
 def test_simple():
-    logger = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.NAME_LEVEL_LINENO_MSG])
+    logger = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.LEVEL_MSG])
     write_message(logger)
     assert compare_files("test_data/app_simple.log", "logs/app_simple.log")
 
 def test_dual(capsys):
-    clog = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.NAME_LEVEL_LINENO_MSG],
+    clog = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.LEVEL_MSG],
                    cout_enabled=True, cout_level=logging.INFO)
 
     clog.debug('debug message')

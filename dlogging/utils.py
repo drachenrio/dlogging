@@ -8,13 +8,13 @@ from logging import Logger
 from typing import List
 
 def get_all_loggers():
-    """ get all loggers """
+    """ get all loggers including root logger """
     loggers = [logging.getLogger()]
     loggers = loggers + [logging.getLogger(name) for name in logging.root.manager.loggerDict]
     return loggers
 
-def show_logger_details(logger):
-    """ show logger details """
+def _display_details(logger: Logger):
+    """ display specified logger details """
     print(f"logger: {id(logger)} {logger}")
     if logger.parent is not None:
         print(f"  {id(logger.root)} root: {logger.root}")
@@ -36,10 +36,10 @@ def show_logger_details(logger):
 def show_all_loggers():
     """ show all loggers """
     for logger in get_all_loggers():
-        show_logger_details(logger)
+        _display_details(logger)
 
 def update_logger_subdir(logger: Logger, subdir):
-    """ update_logger_subdir """
+    """ update logger logging subdir """
     for hdlr in logger.handlers[:]:
         if not isinstance(hdlr, logging.FileHandler):
             continue
@@ -52,18 +52,18 @@ def update_logger_subdir(logger: Logger, subdir):
         logger.addHandler(h_file)
 
 def update_handlers_log_level(logger: Logger, log_level):
-    """ update handlers log level """
+    """ update log level of handlers for specified logger """
     for handler in logger.handlers:
         if isinstance(logger, (logging.FileHandler, logging.StreamHandler)):
             handler.setLevel(log_level)
 
 def update_log_level(logger: Logger, log_level):
-    """ update log level """
+    """ update log level for specified logger """
     logger.setLevel(log_level)
     update_handlers_log_level(logger, log_level)
 
 def print_file_contents(filename: str):
-    """ print file contents """
+    """ print file contents for specified file """
     if os.path.exists(filename):
         print("\ncat {}:".format(filename))
         with open(filename, "r") as f:
@@ -72,6 +72,7 @@ def print_file_contents(filename: str):
                 print(line)
 
 def write_message(logger: logging.Logger) -> None:
+    """ help method to write test messages to specified logger """
     logger.debug('debug message')
     logger.info('info message')
     logger.warning('warn message')
