@@ -1,16 +1,12 @@
 """
 Test standard logging features
-PyTest commands:
-    pytest -s test_logging.py -m test_propagate
-    pytest -s test_logging.py -m test_propagate_root
-    pytest -s test_logging.py -m test_propagate_root_stdout
-    pytest -s test_logging.py -m test_propagate_false
+Sample pytest commands:
     pytest -s test_logging.py -k test_simple
     pytest -s test_logging.py -k test_dual
 """
 import sys
 import os
-import pytest
+from os import path
 import logging
 import shutil
 
@@ -38,17 +34,15 @@ def teardown_module():
     print("teardown_module()")
     logging.shutdown()
 
-@pytest.mark.test_propagate
 def test_propagate():
     print("test_propagate()")
     clog1 = DLogger("main", filename="main.log")
     clog2 = DLogger("main.sub", filename="main.sub.log", propagate=True)
     clog1.info("1 - msg to main.log")
     clog2.info("2 - msg to main.sub.log and propagate to main.log")
-    print_file_contents("logs/main.log")
-    print_file_contents("logs/main.sub.log")
+    print_file_contents(path.join("logs", "main.log"))
+    print_file_contents(path.join("logs", "main.sub.log"))
 
-@pytest.mark.test_propagate_root
 def test_propagate_root():
     print("test_propagate_root()")
     clog0 = DLogger("", filename="app_root.log", log_enabled=True)  # root logger if name = ""
@@ -57,11 +51,10 @@ def test_propagate_root():
     clog0.info("0 - msg to root")
     clog1.info("1 - msg to main")
     clog2.info("2 - msg to sub and propagate to main")
-    print_file_contents("logs/app_root.log")
-    print_file_contents("logs/app_main.log")
-    print_file_contents("logs/sub.log")
+    print_file_contents(path.join("logs", "app_root.log"))
+    print_file_contents(path.join("logs", "app_main.log"))
+    print_file_contents(path.join("logs", "sub.log"))
 
-@pytest.mark.test_propagate_root_stdout
 def test_propagate_root_stdout():  # error message goes top log file and screen
     print("test_propagate_root_stdout()")
     clog_ = DLogger("root", filename="app_root.log", log_enabled=True)  # root logger if name = ""
@@ -72,28 +65,30 @@ def test_propagate_root_stdout():  # error message goes top log file and screen
     clog1.info("clog1 - msg to main")
     clog2.info("clog2 - msg to sub and propagate to main")
     clog2.error("clog2 - error msg goes to file and stdout/stderr")
-    print_file_contents("logs/app_root.log")
-    print_file_contents("logs/app_main.log")
-    print_file_contents("logs/sub.log")
+    print_file_contents(path.join("logs", "app_root.log"))
+    print_file_contents(path.join("logs", "app_main.log"))
+    print_file_contents(path.join("logs", "sub.log"))
 
     loggers = get_all_loggers()
     print("len(loggers): ", len(loggers))
     show_all_loggers()
 
-@pytest.mark.test_propagate_false
 def test_propagate_false():
     print("test_propagate_false()")
     clog1 = DLogger("main", filename="main.log", log_enabled=True)
     clog2 = DLogger("main.sub", filename="sub.log", log_enabled=True, propagate=False)
     clog1.info("1 - msg to main.log")
     clog2.info("2- msg to sub.log and not propagate to main.log")
-    print_file_contents("logs/main.log")
-    print_file_contents("logs/sub.log")
+    print_file_contents(path.join("logs", "main.log"))
+    print_file_contents(path.join("logs", "sub.log"))
 
 def test_simple():
     logger = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.LEVEL_MSG])
     write_message(logger)
-    assert compare_files("test_data/app_simple.log", "logs/app_simple.log")
+    if os.getcwd().endswith('tests'):
+        assert compare_files(path.join("test_data", "app_simple.log"), path.join("logs", "app_simple.log"))
+    else:
+        assert compare_files(path.join("tests", "test_data", "app_simple.log"), path.join("logs", "app_simple.log"))
 
 def test_dual(capsys):
     clog = DLogger("main", filename="app_simple.log", log_fmt=FORMATS[Fmt.LEVEL_MSG],
@@ -117,4 +112,7 @@ def test_dual(capsys):
     _, err = capsys.readouterr()
     assert err == "critical message\n"
 
-    assert compare_files("test_data/app_simple.log", "logs/app_simple.log")
+    if os.getcwd().endswith('tests'):
+        assert compare_files(path.join("test_data", "app_simple.log"), path.join("logs", "app_simple.log"))
+    else:
+        assert compare_files(path.join("tests", "test_data", "app_simple.log"), path.join("logs", "app_simple.log"))

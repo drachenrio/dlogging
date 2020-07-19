@@ -1,7 +1,7 @@
 """
 Test override features
 
-PyTest commands:
+Sample pytest commands:
     pytest -s test_override.py -k test_override_log_level
     pytest -s test_override.py -k test_override_log_filename
     pytest -s test_override.py -k test_override_log_dir
@@ -11,6 +11,7 @@ PyTest commands:
 """
 import sys
 import os
+from os import path
 import logging
 import shutil
 
@@ -22,9 +23,9 @@ from dlogging.utils import print_file_contents, message_count, write_message
 
 
 _DIR_LIST: str = ["logs/", "test_logs/"]
-_FILE_LIST: str = ["logs/sys.log", "logs/app.log", "logs/main.log", "logs/app_new.log",
-                   "test_logs/app.log", "logs/sys1.log", "logs/sys2.log",
-                   "logs/sys/app.log", "test_logs/sys/app_new.log"]
+_FILE_LIST: str = [path.join("logs", "sys.log"), "logs/app.log", path.join("logs", "main.log"), path.join("logs", "app_new.log"),
+                   path.join("test_logs", "app.log"), path.join("logs", "sys1.log"), path.join("logs", "sys2.log"),
+                   path.join("logs", "sys", "app.log"), path.join("logs", "sys", "app_new.log")]
 
 def reset():
     """reset"""
@@ -63,16 +64,16 @@ def test_override_log_level():
     logger = DLogger(name="main", filename="app.log", log_level=logging.INFO)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     # override log_level 'logging.INFO' w/ 'logging.WARNING'
     LOG_CONF.log_level = logging.WARNING
     LOG_CONF.override_logger_settings(True)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 7
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 7
 
 def test_override_log_filename():
     """test_override_log_filename"""
@@ -80,8 +81,8 @@ def test_override_log_filename():
     logger = DLogger(name="main", filename="app.log", log_level=logging.INFO)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     # override log filename 'app.log' w/ 'app_new.log'
     LOG_CONF.filename = "app_new.log"
@@ -89,9 +90,9 @@ def test_override_log_filename():
 
     write_message(logger)
 
-    print_file_contents("logs/app_new.log")
-    assert message_count("logs/app.log") == 4
-    assert message_count("logs/app_new.log") == 4
+    print_file_contents(path.join("logs", "app_new.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
+    assert message_count(path.join("logs", "app_new.log")) == 4
 
 def test_override_log_filenames():
     """
@@ -104,10 +105,10 @@ def test_override_log_filenames():
 
     write_message(logger1)
     write_message(logger2)
-    print_file_contents("logs/sys.log")
-    assert message_count("logs/sys.log") == 3
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "sys.log"))
+    assert message_count(path.join("logs", "sys.log")) == 3
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     # move all messages to 'logs/main.log'
     LOG_CONF.filename = "main.log"
@@ -116,11 +117,11 @@ def test_override_log_filenames():
     write_message(logger1)
     write_message(logger2)
 
-    assert message_count("logs/sys.log") == 3
-    assert message_count("logs/app.log") == 4
+    assert message_count(path.join("logs", "sys.log")) == 3
+    assert message_count(path.join("logs", "app.log")) == 4
 
-    print_file_contents("logs/main.log")
-    assert message_count("logs/main.log") == 7
+    print_file_contents(path.join("logs", "main.log"))
+    assert message_count(path.join("logs", "main.log")) == 7
 
 def test_override_log_dir():
     """override default log dir, 'logs', which is under current directory"""
@@ -128,18 +129,18 @@ def test_override_log_dir():
     logger = DLogger(name="main", filename="app.log", log_level=logging.INFO)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     # override default log dir 'logs' w/ 'test_logs'
     LOG_CONF.log_dir = "test_logs"
     LOG_CONF.override_logger_settings(True)
 
     write_message(logger)
-    print_file_contents("test_logs/app.log")
+    print_file_contents(path.join("test_logs", "app.log"))
 
-    assert message_count("logs/app.log") == 4
-    assert message_count("test_logs/app.log") == 4
+    assert message_count(path.join("logs", "app.log")) == 4
+    assert message_count(path.join("test_logs", "app.log")) == 4
 
 def test_override_subdir():
     """test_override_subdir"""
@@ -147,18 +148,18 @@ def test_override_subdir():
     logger = DLogger(name="main", filename="app.log", log_level=logging.INFO)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     # override default empty log subdir w/ 'sys'
     LOG_CONF.sub_dir = "sys"
     LOG_CONF.override_logger_settings(True)
 
     write_message(logger)
-    print_file_contents("logs/sys/app.log")
+    print_file_contents(path.join("logs", "sys", "app.log"))
 
-    assert message_count("logs/app.log") == 4
-    assert message_count("logs/sys/app.log") == 4
+    assert message_count(path.join("logs", "app.log")) == 4
+    assert message_count(path.join("logs", "sys", "app.log")) == 4
 
 def test_override_multi_attributes():
     """test_override_multi_attributes"""
@@ -166,8 +167,8 @@ def test_override_multi_attributes():
     logger = DLogger(name="main", filename="app.log", log_level=logging.INFO)
 
     write_message(logger)
-    print_file_contents("logs/app.log")
-    assert message_count("logs/app.log") == 4
+    print_file_contents(path.join("logs", "app.log"))
+    assert message_count(path.join("logs", "app.log")) == 4
 
     LOG_CONF.log_dir = "test_logs" # override default log dir 'logs' w/ 'test_logs'
     LOG_CONF.sub_dir = "sys"  # override default empty log subdir w/ 'sys'
@@ -177,10 +178,10 @@ def test_override_multi_attributes():
     LOG_CONF.override_logger_settings(True)
 
     write_message(logger)
-    print_file_contents("test_logs/sys/app_new.log")
+    print_file_contents(path.join("logs", "sys", "app_new.log"))
 
-    assert message_count("logs/app.log") == 4  # no changes
-    assert message_count("test_logs/sys/app_new.log") == 3
+    assert message_count(path.join("logs", "app.log")) == 4  # no changes
+    assert message_count(path.join("test_logs", "sys", "app_new.log")) == 3
 
 def test_override_name_re_filter():
     """override apply to logger names match regular expression """
@@ -192,9 +193,9 @@ def test_override_name_re_filter():
     write_message(logger1)
     write_message(logger2)
     write_message(logger3)
-    assert message_count("logs/app.log") == 3
-    assert message_count("logs/sys1.log") == 2
-    assert message_count("logs/sys2.log") == 3
+    assert message_count(path.join("logs", "app.log")) == 3
+    assert message_count(path.join("logs", "sys1.log")) == 2
+    assert message_count(path.join("logs", "sys2.log")) == 3
 
     LOG_CONF.logger_name_re_filter = "^sys"  # apply to logger names start with "sys"
     LOG_CONF.log_level = logging.INFO
@@ -204,9 +205,9 @@ def test_override_name_re_filter():
     write_message(logger2)
     write_message(logger3)
 
-    assert message_count("logs/app.log") == 3 + 3
-    assert message_count("logs/sys1.log") == 2 + 4
-    assert message_count("logs/sys2.log") == 3 + 4
+    assert message_count(path.join("logs", "app.log")) == 3 + 3
+    assert message_count(path.join("logs", "sys1.log")) == 2 + 4
+    assert message_count(path.join("logs", "sys2.log")) == 3 + 4
 
 def test_override_name_re_filter_2():
     """
@@ -221,9 +222,9 @@ def test_override_name_re_filter_2():
     write_message(logger1)
     write_message(logger2)
     write_message(logger3)
-    assert message_count("logs/app.log") == 3
-    assert message_count("logs/sys1.log") == 2
-    assert message_count("logs/sys2.log") == 3
+    assert message_count(path.join("logs", "app.log")) == 3
+    assert message_count(path.join("logs", "sys1.log")) == 2
+    assert message_count(path.join("logs", "sys2.log")) == 3
 
     # apply to logger names start w/ "sys" & override_allowed=True
     LOG_CONF.logger_name_re_filter = "^sys"
@@ -234,6 +235,6 @@ def test_override_name_re_filter_2():
     write_message(logger2)
     write_message(logger3)
 
-    assert message_count("logs/app.log") == 3 + 3
-    assert message_count("logs/sys1.log") == 2 + 2  # logger 'sys1' override_allowed=False
-    assert message_count("logs/sys2.log") == 3 + 4
+    assert message_count(path.join("logs", "app.log")) == 3 + 3
+    assert message_count(path.join("logs", "sys1.log")) == 2 + 2  # logger 'sys1' override_allowed=False
+    assert message_count(path.join("logs", "sys2.log")) == 3 + 4

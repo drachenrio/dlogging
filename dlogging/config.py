@@ -43,7 +43,7 @@ FORMATS = {Fmt.DEFAULT: '%(name)s %(levelname)s %(message)s',
            Fmt.COMPLEX: '%(asctime)s %(filename)s:%(lineno)d : %(funcName)s %(name)s %(levelname)s %(message)s',
            Fmt.FNAME_LEVEL_MSG: '%(filename)s %(levelname)s %(message)s',
            Fmt.FNAME_LINENO_FUNCNAME: '%(filename)s:%(lineno)d %(funcName)s %(levelname)s %(message)s',
-           Fmt.FNAME_LINENO_LEVEL: '%(filename)s:%(lineno)d %(levelname)s %(message)s',
+           Fmt.FNAME_LINENO_LEVEL: '%(filename)s:%(lineno)d %(name)s %(levelname)s %(message)s',
            Fmt.LEVEL_MSG: '%(levelname)s %(message)s',
            Fmt.MSG: '%(message)s',
            }
@@ -57,7 +57,6 @@ def _create_log_filename(log_dir: str, sub_dir: str, filename: str) -> str:
     """ create log filename """
     if log_dir is not None:
         file_path = sys.argv[0]
-        print("file path: ", file_path)
         file_path = log_dir
         os.makedirs(file_path, exist_ok=True)
         if sub_dir is not None:

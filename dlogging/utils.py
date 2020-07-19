@@ -13,7 +13,7 @@ def get_all_loggers():
     loggers = loggers + [logging.getLogger(name) for name in logging.root.manager.loggerDict]
     return loggers
 
-def _display_details(logger: Logger):
+def display_details(logger: Logger):
     """ display specified logger details """
     print(f"logger: {id(logger)} {logger}")
     if logger.parent is not None:
@@ -36,7 +36,7 @@ def _display_details(logger: Logger):
 def show_all_loggers():
     """ show all loggers """
     for logger in get_all_loggers():
-        _display_details(logger)
+        display_details(logger)
 
 def update_logger_subdir(logger: Logger, subdir):
     """ update logger logging subdir """
